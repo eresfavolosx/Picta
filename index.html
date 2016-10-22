@@ -1,61 +1,131 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <!-- Required meta tags-->
+<!--ahg
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<!doctype html>
+
+<html lang="en">
+
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <!-- Color theme for statusbar -->
-    <meta name="theme-color" content="#2196f3">
-    <!-- Your app title -->
-    <title>My App</title>
-    <!-- Path to Framework7 Library CSS, Material Theme -->
-    <link rel="stylesheet" href="Assets/CSS/framework7.material.css">
-    <!-- Path to Framework7 color related styles, Material Theme -->
-    <link rel="stylesheet" href="Assets/CSS/framework7.material.colors.css">
-    <link rel="stylesheet" href="Assets/CSS/framework7.material.colors.rtl.css">
-    <!-- Path to your custom app styles-->
-    <link rel="stylesheet" href="path/to/my-app.css">
-  </head>
-  <body>
-    <!-- Views -->
-    <div class="views">
-      <!-- Your main view, should have "view-main" class -->
-      <div class="view view-main">
-        <!-- Pages container, because we use fixed navbar and toolbar, it has additional appropriate classes-->
-        <div class="pages navbar-fixed toolbar-fixed">
-          <!-- Page, "data-page" contains page name -->
-          <div data-page="index" class="page">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="College doesn't have to be expensive">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="icon" href="images/Logo.png">
+    <title>dLiber</title>
 
-            <!-- Top Navbar. In Material theme it should be inside of the page-->
-            <div class="navbar">
-              <div class="navbar-inner">
-                <div class="center">Awesome App</div>
-              </div>
-            </div>
+    <!-- Page styles -->
 
-            <!-- Bottom Toolbar. In Material theme it should be inside of the page-->
-            <div class="toolbar">
-              <div class="toolbar-inner">
-                <!-- Toolbar links -->
-                <a href="#" class="link">Link 1</a>
-                <a href="#" class="link">Link 2</a>
-              </div>
-            </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="Assets/JS/script.js">
+    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue-pink.min.css" />
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
+    <link rel="stylesheet" href="Assets/CSS/bootstrap.css">
+    <link rel="stylesheet" href="Assets/CSS/style.css">
 
-            <!-- Scrollable page content -->
-            <div class="page-content">
-              <p>Page content goes here</p>
-              <!-- Link to another page -->
-              <a href="about.html">About app</a>
+
+
+    <!-- Page JS -->
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <script src="https://use.fontawesome.com/cb7558c9f5.js"></script>
+
+</head>
+
+<body>
+
+    <!-- Simple header with scrollable tabs. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--no-drawer-button">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Title</span>
             </div>
-          </div>
-        </div>
-      </div>
+            <!-- Tabs -->
+        </header>
+        <main class="mdl-layout__content">
+            <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+                <div class="page-content">
+                    <!-- Your content goes here -->
+                </div>
+            </section>
+            <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+                <div class="page-content">
+                    <!-- Your content goes here -->
+                </div>
+            </section>
+            <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+                <div class="page-content">
+                    <!-- Your content goes here -->
+                </div>
+            </section>
+            <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+                <div class="page-content">
+                    <!-- Your content goes here -->
+                </div>
+            </section>
+            <section class="mdl-layout__tab-panel" id="scroll-tab-5">
+                <div class="page-content">
+                    <!-- Your content goes here -->
+                </div>
+            </section>
+            <section class="mdl-layout__tab-panel" id="scroll-tab-6">
+                <div class="page-content">
+                    <!-- Your content goes here -->
+                </div>
+            </section>
+            <div class="wrap bottom-nav">
+                <nav class="menu  bottom-nav">
+                    <input type="radio" name="menu" id="recent">
+                    <input type="radio" name="menu" id="favourite" checked>
+                    <input type="radio" name="menu" id="settings">
+                    <div class="list">
+                        <div class="overlay">
+                            <span class="overlay-recent"></span>
+                            <span class="overlay-favourite"></span>
+                            <span class="overlay-settings"></span>
+                        </div>
+                        <div class="link-wrap">
+                            <label for="recent">
+				<i class="icon-clock"></i>
+				<span>History</span>
+			</label>
+                            <label for="favourite">
+				<i class="icon-heart"></i>
+				<span></span>
+			</label>
+
+                            <label for="settings">
+				<i class="icon-cog"></i>
+				<span>Settings</span>
+			</label>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </main>
     </div>
-    <!-- Path to Framework7 Library JS-->
-    <script type="text/javascript" src="Assets/JS/framework7.js"></script>
-    <!-- Path to your app js-->
-    <script type="text/javascript" src="Assets/JS/script.js"></script>
-  </body>
+    <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--fab" id="view-source">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfhY4c9kmjTTA9C3W7ov3UnLl9fL4NM7JJ-NUYT3XpIB0nEvQ/viewform" target="_blank"
+  <i class="material-icons">adjust</i></a>
+</button>
+
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+</body>
+
 </html>
