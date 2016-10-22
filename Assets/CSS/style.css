@@ -174,3 +174,7 @@ input[name="menu"]{display:none}
 body {
 	background-color: #EEEEEE;
 }
+
+.mdl-layout__header-row {
+	background-color: #2962FF;
+}
