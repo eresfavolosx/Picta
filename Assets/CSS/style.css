@@ -152,6 +152,7 @@ input[name="menu"]{display:none}
 	text-decoration: none;
 	align-items: center;
 	justify-content: center;
+	background-color: #F44336;
 }
 
 #view-source:hover,

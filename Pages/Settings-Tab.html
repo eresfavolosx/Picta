@@ -29,14 +29,14 @@
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
     </script>
-    <script type="text/javascript" src="Assets/JS/script.js">
+    <script type="text/javascript" src="../Assets/JS/script.js">
     </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue-pink.min.css" />
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
-    <link rel="stylesheet" href="Assets/CSS/bootstrap.css">
-    <link rel="stylesheet" href="Assets/CSS/style.css">
+    <link rel="stylesheet" href="../Assets/CSS/bootstrap.css">
+    <link rel="stylesheet" href="../Assets/CSS/style.css">
 
 
 
@@ -50,6 +50,13 @@
 
     <!-- Simple header with scrollable tabs. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--no-drawer-button">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row ">
+                <!-- Title -->
+                <span class="mdl-layout-title">Settings</span>
+            </div>
+            <!-- Tabs -->
+        </header>
         <main class="mdl-layout__content">
             <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
                 <div class="page-content">
@@ -58,9 +65,9 @@
             </section>
             <div class="wrap bottom-nav">
                 <nav class="menu  bottom-nav">
-                    <input type="radio" name="menu" id="recent" onchange="window.location.replace('Pages/History-Tab.html')">
-                    <input type="radio" name="menu" id="favourite" checked>
-                    <input type="radio" name="menu" id="settings" onchange="window.location.replace('Pages/Settings-Tab.html')">
+                    <input type="radio" name="menu" id="recent" onchange="window.location.replace('History-Tab.html')">
+                    <input type="radio" name="menu" id="favourite">
+                    <input type="radio" name="menu" id="settings" onchange="window.location.replace('Settings-Tab.html')" checked>
                     <div class="list">
                         <div class="overlay">
                             <span class="overlay-recent"></span>
@@ -70,7 +77,7 @@
                         <div class="link-wrap">
                             <label for="recent">
 				<i class="icon-clock"></i>
-				<span>History</span>
+				<span>Settings</span>
 			</label>
                             <label for="favourite">
 				<i class="icon-heart"></i>
@@ -87,11 +94,9 @@
             </div>
         </main>
     </div>
-    <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--fab" id="view-source">
-        <a href="index.html"
-  <i class="material-icons">adjust</i></a>
-</button>
-
+     <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--fab" id="view-source">
+    <a href="../index.html" <i class="material-icons">adjust</i></a>
+    </button>
 
     <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 </body>
