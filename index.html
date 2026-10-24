@@ -1,99 +1,291 @@
-<!--ahg
-  Material Design Lite
-  Copyright 2015 Google Inc. All rights reserved.
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      https://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License
--->
 <!doctype html>
-
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="College doesn't have to be expensive">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Picta</title>
+    <meta name="description" content="Picta: Assistive camera application with real-time Daltonization filters and color identification for color-blind individuals.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a237e">
+    <title>Picta · Assistive Color Vision Camera</title>
 
-    <!-- Page styles -->
-
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
-    </script>
-    <script type="text/javascript" src="Assets/JS/script.js">
-    </script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue-pink.min.css" />
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
-    <link rel="stylesheet" href="Assets/CSS/bootstrap.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css" />
     <link rel="stylesheet" href="Assets/CSS/style.css">
 
+    <!-- Embedded SVG Filters for Real-time Hardware Daltonization & CVD Simulation -->
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+        <defs>
+            <!-- Normal / Pass-through -->
+            <filter id="filter-normal">
+                <feColorMatrix type="matrix" values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 1 0" />
+            </filter>
 
+            <!-- Protanopia Daltonization Boost (Red-Weakness Correction) -->
+            <!-- Shifts missing red wavelength contrast into green and blue channels -->
+            <filter id="filter-protanopia-boost">
+                <feColorMatrix type="matrix" values="
+                    1.00  0.00  0.00  0 0
+                    0.45  0.75  0.00  0 0
+                    0.45  0.00  0.75  0 0
+                    0     0     0     1 0" />
+                <feComponentTransfer>
+                    <feFuncR type="linear" slope="1.15" />
+                    <feFuncG type="linear" slope="1.1" />
+                    <feFuncB type="linear" slope="1.0" />
+                </feComponentTransfer>
+            </filter>
 
-    <!-- Page JS -->
-    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-    <script src="https://use.fontawesome.com/cb7558c9f5.js"></script>
+            <!-- Deuteranopia Daltonization Boost (Green-Weakness Correction) -->
+            <!-- Shifts green contrast into red and blue channels -->
+            <filter id="filter-deuteranopia-boost">
+                <feColorMatrix type="matrix" values="
+                    0.75  0.45  0.00  0 0
+                    0.00  1.00  0.00  0 0
+                    0.00  0.45  0.75  0 0
+                    0     0     0     1 0" />
+                <feComponentTransfer>
+                    <feFuncR type="linear" slope="1.1" />
+                    <feFuncG type="linear" slope="1.15" />
+                    <feFuncB type="linear" slope="1.0" />
+                </feComponentTransfer>
+            </filter>
 
+            <!-- Tritanopia Daltonization Boost (Blue-Weakness Correction) -->
+            <!-- Shifts blue contrast into red and green channels -->
+            <filter id="filter-tritanopia-boost">
+                <feColorMatrix type="matrix" values="
+                    1.00  0.00  0.50  0 0
+                    0.00  1.00  0.50  0 0
+                    0.00  0.00  0.50  0 0
+                    0     0     0     1 0" />
+                <feComponentTransfer>
+                    <feFuncR type="linear" slope="1.05" />
+                    <feFuncG type="linear" slope="1.05" />
+                    <feFuncB type="linear" slope="1.2" />
+                </feComponentTransfer>
+            </filter>
+
+            <!-- High Contrast & Edge Sharpening (Achromatopsia / Low-Vision Boost) -->
+            <filter id="filter-high-contrast">
+                <feColorMatrix type="matrix" values="
+                    1.60 -0.30 -0.30 0 -0.05
+                   -0.30  1.60 -0.30 0 -0.05
+                   -0.30 -0.30  1.60 0 -0.05
+                    0     0     0    1  0" />
+            </filter>
+
+            <!-- Protanopia Simulation (Brettel/Viénot) -->
+            <filter id="filter-sim-protanopia">
+                <feColorMatrix type="matrix" values="
+                    0.56667 0.43333 0.00000 0 0
+                    0.55833 0.44167 0.00000 0 0
+                    0.00000 0.24167 0.75833 0 0
+                    0       0       0       1 0" />
+            </filter>
+
+            <!-- Deuteranopia Simulation (Brettel/Viénot) -->
+            <filter id="filter-sim-deuteranopia">
+                <feColorMatrix type="matrix" values="
+                    0.62500 0.37500 0.00000 0 0
+                    0.70000 0.30000 0.00000 0 0
+                    0.00000 0.30000 0.70000 0 0
+                    0       0       0       1 0" />
+            </filter>
+
+            <!-- Tritanopia Simulation (Brettel/Viénot) -->
+            <filter id="filter-sim-tritanopia">
+                <feColorMatrix type="matrix" values="
+                    0.95000 0.05000 0.00000 0 0
+                    0.00000 0.43333 0.56667 0 0
+                    0.00000 0.47500 0.52500 0 0
+                    0       0       0       1 0" />
+            </filter>
+
+            <!-- Grayscale / Rod Vision (Achromatopsia Simulation) -->
+            <filter id="filter-grayscale">
+                <feColorMatrix type="matrix" values="
+                    0.299 0.587 0.114 0 0
+                    0.299 0.587 0.114 0 0
+                    0.299 0.587 0.114 0 0
+                    0     0     0     1 0" />
+            </filter>
+        </defs>
+    </svg>
 </head>
 
-<body>
+<body class="picta-body">
+    <div class="picta-app-container">
+        <!-- Top Application Header Bar -->
+        <header class="picta-header">
+            <div class="header-left">
+                <div class="brand-badge">
+                    <i class="material-icons brand-icon">visibility</i>
+                    <div class="brand-info">
+                        <span class="brand-name">Picta</span>
+                        <span class="brand-tag">Assistive Vision</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="btn-sample-image" class="icon-btn" title="Load Ishihara Test Plate" aria-label="Load Test Plate">
+                    <i class="material-icons">palette</i>
+                </button>
+                <label for="file-upload-input" class="icon-btn" title="Upload Photo to Test Filter" aria-label="Upload Photo">
+                    <i class="material-icons">file_upload</i>
+                    <input type="file" id="file-upload-input" accept="image/*" style="display:none;">
+                </label>
+                <button id="btn-camera-flip" class="icon-btn" title="Flip Camera" aria-label="Flip Camera">
+                    <i class="material-icons">flip_camera_ios</i>
+                </button>
+                <button id="btn-tts-toggle" class="icon-btn" title="Voice Announcement" aria-label="Voice Announcement">
+                    <i class="material-icons" id="tts-icon">volume_up</i>
+                </button>
+            </div>
+        </header>
 
-    <!-- Simple header with scrollable tabs. -->
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--no-drawer-button">
-        <main class="mdl-layout__content">
-            <section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
-                <div class="page-content">
-                    <!-- Your content goes here -->
+        <!-- Main Viewport Area -->
+        <main class="picta-viewport" id="viewport">
+            <!-- Camera Video Feed -->
+            <video id="camera-feed" class="camera-stream" autoplay playsinline muted></video>
+
+            <!-- Uploaded / Fallback Image Canvas -->
+            <canvas id="fallback-canvas" class="fallback-stream" style="display:none;"></canvas>
+
+            <!-- Camera Flash Animation Overlay -->
+            <div id="camera-flash" class="camera-flash"></div>
+
+            <!-- Permission / Fallback Notice Banner -->
+            <div id="camera-status-overlay" class="camera-status-overlay" style="display:none;">
+                <i class="material-icons status-icon">videocam_off</i>
+                <h3 id="status-title">Camera Permission Needed</h3>
+                <p id="status-desc">Allow camera access to use the live Daltonization viewfinder, or upload a photo to test color filters.</p>
+                <div class="status-actions">
+                    <button id="btn-retry-camera" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        Enable Camera
+                    </button>
+                    <label for="file-upload-input" class="mdl-button mdl-js-button mdl-button--raised">
+                        Upload Photo
+                    </label>
+                </div>
+            </div>
+
+            <!-- Interactive Crosshair / Reticle for Color Identification -->
+            <div id="color-reticle" class="color-reticle" style="top: 50%; left: 50%;">
+                <div class="reticle-ring"></div>
+                <div class="reticle-dot" id="reticle-swatch"></div>
+                <div class="reticle-hint">Tap anywhere to sample color</div>
+            </div>
+
+            <!-- Floating Color Identification Card -->
+            <section class="color-inspector-card" id="color-inspector" aria-live="polite">
+                <div class="color-swatch-box">
+                    <div class="swatch-circle" id="card-swatch-circle"></div>
+                </div>
+                <div class="color-details">
+                    <div class="color-title-row">
+                        <h2 class="color-name" id="card-color-name">Sample Any Point</h2>
+                        <button id="btn-speak-color" class="speak-btn" title="Speak Color Name" aria-label="Speak Color Name">
+                            <i class="material-icons">volume_up</i>
+                        </button>
+                    </div>
+                    <div class="color-specs">
+                        <span class="spec-pill" id="card-hex">#808080</span>
+                        <span class="spec-pill" id="card-rgb">rgb(128, 128, 128)</span>
+                        <span class="spec-pill mood-pill" id="card-desc">Medium Gray</span>
+                    </div>
                 </div>
             </section>
-            <div class="wrap bottom-nav">
-                <nav class="menu  bottom-nav">
-                    <input type="radio" name="menu" id="recent" onchange="window.location.replace('Pages/History-Tab.html')">
-                    <input type="radio" name="menu" id="favourite" checked>
-                    <input type="radio" name="menu" id="settings" onchange="window.location.replace('Pages/Settings-Tab.html')">
-                    <div class="list">
-                        <div class="overlay">
-                            <span class="overlay-recent"></span>
-                            <span class="overlay-favourite"></span>
-                            <span class="overlay-settings"></span>
-                        </div>
-                        <div class="link-wrap">
-                            <label for="recent">
-				<i class="icon-clock"></i>
-				<span>History</span>
-			</label>
-                            <label for="favourite">
-				<i class="icon-heart"></i>
-				<span></span>
-			</label>
-
-                            <label for="settings">
-				<i class="icon-cog"></i>
-				<span>Settings</span>
-			</label>
-                        </div>
-                    </div>
-                </nav>
-            </div>
         </main>
+
+        <!-- Filter Pill Carousel -->
+        <nav class="filter-carousel-wrapper" aria-label="Color Vision Deficiency Filters">
+            <div class="filter-carousel" id="filter-carousel">
+                <button class="filter-pill active" data-filter="normal" data-mode="assist">
+                    <span class="pill-dot" style="background: #ffffff;"></span>
+                    <span class="pill-label">Original</span>
+                </button>
+                <button class="filter-pill" data-filter="protanopia-boost" data-mode="assist">
+                    <span class="pill-badge">Boost</span>
+                    <span class="pill-dot" style="background: #e53935;"></span>
+                    <span class="pill-label">Protanopia (Red)</span>
+                </button>
+                <button class="filter-pill" data-filter="deuteranopia-boost" data-mode="assist">
+                    <span class="pill-badge">Boost</span>
+                    <span class="pill-dot" style="background: #43a047;"></span>
+                    <span class="pill-label">Deuteranopia (Green)</span>
+                </button>
+                <button class="filter-pill" data-filter="tritanopia-boost" data-mode="assist">
+                    <span class="pill-badge">Boost</span>
+                    <span class="pill-dot" style="background: #1e88e5;"></span>
+                    <span class="pill-label">Tritanopia (Blue)</span>
+                </button>
+                <button class="filter-pill" data-filter="high-contrast" data-mode="assist">
+                    <span class="pill-badge">Crisp</span>
+                    <span class="pill-dot" style="background: #ffb300;"></span>
+                    <span class="pill-label">High Contrast</span>
+                </button>
+                <button class="filter-pill" data-filter="sim-protanopia" data-mode="sim">
+                    <span class="pill-badge sim">Sim</span>
+                    <span class="pill-dot" style="background: #8d6e63;"></span>
+                    <span class="pill-label">Sim Protan</span>
+                </button>
+                <button class="filter-pill" data-filter="sim-deuteranopia" data-mode="sim">
+                    <span class="pill-badge sim">Sim</span>
+                    <span class="pill-dot" style="background: #9e9d24;"></span>
+                    <span class="pill-label">Sim Deuter</span>
+                </button>
+                <button class="filter-pill" data-filter="sim-tritanopia" data-mode="sim">
+                    <span class="pill-badge sim">Sim</span>
+                    <span class="pill-dot" style="background: #e91e63;"></span>
+                    <span class="pill-label">Sim Tritan</span>
+                </button>
+                <button class="filter-pill" data-filter="grayscale" data-mode="sim">
+                    <span class="pill-badge sim">Mono</span>
+                    <span class="pill-dot" style="background: #757575;"></span>
+                    <span class="pill-label">Achromatopsia</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Bottom Shutter & Navigation Bar -->
+        <footer class="picta-bottom-bar">
+            <!-- Left Link: History Tab -->
+            <a href="Pages/History-Tab.html" class="nav-tab-btn" id="nav-history" title="Saved Snapshots">
+                <i class="material-icons">history</i>
+                <span class="nav-label">History</span>
+                <span class="nav-badge" id="history-counter" style="display:none;">0</span>
+            </a>
+
+            <!-- Center Action: Shutter Button -->
+            <div class="shutter-wrapper">
+                <button id="btn-shutter" class="shutter-btn" title="Capture Snapshot" aria-label="Take Photo">
+                    <div class="shutter-inner">
+                        <i class="material-icons shutter-icon">photo_camera</i>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Right Link: Settings Tab -->
+            <a href="Pages/Settings-Tab.html" class="nav-tab-btn" id="nav-settings" title="App Settings">
+                <i class="material-icons">tune</i>
+                <span class="nav-label">Settings</span>
+            </a>
+        </footer>
+
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Hidden Canvas for Video Frame Extraction & Snapshot Daltonization -->
+        <canvas id="hidden-capture-canvas" style="display:none;"></canvas>
     </div>
-    <button class="mdl-button mdl-js-button mdl-button--colored mdl-button--fab" id="view-source">
-        <a href="index.html"
-  <i class="material-icons">adjust</i></a>
-</button>
 
-
-    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <!-- Application Script -->
+    <script src="Assets/JS/script.js"></script>
 </body>
-
 </html>
