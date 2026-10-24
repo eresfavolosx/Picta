@@ -249,8 +249,8 @@
     state.lastSampledColor = color;
     const rgbStr = `rgb(${color.r}, ${color.g}, ${color.b})`;
 
-    if (reticleSwatch) reticleSwatch.style.backgroundColor = rgbStr;
-    if (cardSwatch) cardSwatch.style.backgroundColor = rgbStr;
+    if (reticleSwatch) reticleSwatch.style.setProperty('background-color', rgbStr, 'important');
+    if (cardSwatch) cardSwatch.style.setProperty('background-color', rgbStr, 'important');
     if (cardName) cardName.textContent = color.name;
     if (cardHex) cardHex.textContent = color.hex;
     if (cardRgb) cardRgb.textContent = rgbStr;
